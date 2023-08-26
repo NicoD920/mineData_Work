@@ -1,0 +1,146 @@
+---
+title: "mineDatos_Work"
+author: "Nicolas Delgado"
+date: "2023-08-26"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+#knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+#install.packages("readr")  # Si aún no tienes la librería
+library(readr)
+
+url_1 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_1.csv'
+url_2 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_2.csv'
+url_3 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_3.csv'
+url_4 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_4.csv'
+url_5 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_5.csv'
+url_6 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_6.csv'
+url_7 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_7.csv'
+url_8 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_8.csv'
+url_9 <- 'https://raw.githubusercontent.com/NicoD920/mineData_Work/main/data/parte_9.csv'
+data_1 <- read.csv(url_1, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_2 <- read.csv(url_2, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_3 <- read.csv(url_3, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_4 <- read.csv(url_4, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_5 <- read.csv(url_5, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_6 <- read.csv(url_6, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_7 <- read.csv(url_7, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_8 <- read.csv(url_8, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+data_9 <- read.csv(url_9, stringsAsFactors = FALSE,sep=",", encoding="UTF-8")
+
+
+# Crear una lista con todos los DataFrames
+data_frames <- list(data_1, data_2, data_3, data_4, data_5, data_6, data_7, data_8, data_9)
+
+# Unir todos los DataFrames en uno solo
+df <- do.call(rbind, data_frames)
+```
+
+
+#Una vez cargado el df
+
+```{r}
+
+head(df)
+
+```
+
+```{r}
+
+summary(df)
+
+```
+```{r}
+
+# Supongamos que "df" es tu DataFrame
+df <- subset(df, select = -review_profilename)
+
+```
+
+
+```{r}
+
+bre_name <- unique(df$brewery_name)
+b_style <- unique(df$beer_style)
+b_name <- unique(df$beer_name)
+
+```
+
+```{r}
+
+# Supongamos que tienes un DataFrame llamado "df" y una columna llamada "variable_categorica"
+# que contiene las variables categóricas no ordenadas
+
+# Obtener niveles únicos y asignar valores numéricos únicos
+#niveles_unicos_breweryname <- unique(df$brewery_name)
+#valores_numericos_breweryname <- seq_along(niveles_unicos)
+
+# Crear un data frame con la correspondencia
+#correspondencia_df_breweryname <- data.frame(categoria = niveles_unicos, valor_numerico = valores_numericos)
+
+# Reemplazar la columna categórica por la columna numérica en el DataFrame original
+#df$brewery_name <- correspondencia_df_breweryname$valor_numerico[match(df$variable_categorica, correspondencia_df_breweryname$categoria)]
+```
+
+```{r}
+
+# Obtener niveles únicos y asignar valores numéricos únicos
+niveles_unicos_breweryname <- unique(df$brewery_name)
+valores_numericos_breweryname <- seq_along(niveles_unicos_breweryname)
+
+# Crear un data frame con la correspondencia
+correspondencia_df_breweryname <- data.frame(categoria = niveles_unicos_breweryname, valor_numerico = valores_numericos_breweryname)
+
+# Reemplazar la columna categórica por la columna numérica en el DataFrame original
+df$brewery_name <- correspondencia_df_breweryname$valor_numerico[match(df$brewery_name, correspondencia_df_breweryname$categoria)]
+
+
+```
+
+```{r}
+
+
+# Obtener niveles únicos y asignar valores numéricos únicos
+niveles_unicos_beerstyle <- unique(df$beer_style)
+valores_numericos_beerstyle <- seq_along(niveles_unicos_beerstyle)
+
+# Crear un data frame con la correspondencia
+correspondencia_df_beerstyle <- data.frame(categoria = niveles_unicos_beerstyle, valor_numerico = valores_numericos_beerstyle)
+
+# Reemplazar la columna categórica por la columna numérica en el DataFrame original
+df$beer_style <- correspondencia_df_beerstyle$valor_numerico[match(df$beer_style, correspondencia_df_beerstyle$categoria)]
+
+
+```
+
+```{r}
+
+# Obtener niveles únicos y asignar valores numéricos únicos
+niveles_unicos_beername <- unique(df$beer_name)
+valores_numericos_beername <- seq_along(niveles_unicos_beername)
+
+# Crear un data frame con la correspondencia
+correspondencia_df_beername <- data.frame(categoria = niveles_unicos_beername, valor_numerico = valores_numericos_beername)
+
+# Reemplazar la columna categórica por la columna numérica en el DataFrame original
+df$beer_name <- correspondencia_df_beername$valor_numerico[match(df$beer_name, correspondencia_df_beername$categoria)]
+
+
+```
+
+```{r}
+columnas <- names(df)
+print(columnas)
+```
+#Sabemos que las variables categoricas son "beer_name" (2), "beer_style"(7) y "brewery_name"(10)
+#Además tenemos vectores "niveles_unicos_beername", "niveles_unicos_beerstyle" y "niveles_unicos_brewery_name" que contienen la información de a que valor corresponde cada variable categorica, esto es para el posterior analisis, además que es importante diferenciarlo dada la intención de estandarizar los valores posteriormente, obviamente no estandarisaremos las variables categoricas
+
+```{r}
+
+
+
+```
